@@ -76,6 +76,45 @@ func writeTasks(username string, tasks []Task) {
 	f.SetCellValue("Sheet1", fmt.Sprintf("I%v", i+10), "Total Hours Per week")
 	f.SetCellValue("Sheet1", fmt.Sprintf("J%v", i+10), totalHours)
 
+	titleStyle, _ := f.NewStyle(&excelize.Style{
+		Fill: excelize.Fill{Type: "pattern", Color: []string{"204559"}, Pattern: 1},
+		Font: &excelize.Font{
+			Color: "FFFFFF",
+		},
+		Border: []excelize.Border{
+			{Type: "left", Color: "000000", Style: 1},
+			{Type: "up", Color: "000000", Style: 1},
+			{Type: "down", Color: "000000", Style: 1},
+			{Type: "right", Color: "000000", Style: 1},
+		},
+	})
+	totalBarStyle, _ := f.NewStyle(&excelize.Style{
+		Fill: excelize.Fill{Type: "pattern", Color: []string{"316886"}, Pattern: 1},
+		Font: &excelize.Font{
+			Color: "FFFFFF",
+		},
+		Border: []excelize.Border{
+			{Type: "left", Color: "000000", Style: 1},
+			{Type: "up", Color: "000000", Style: 1},
+			{Type: "down", Color: "000000", Style: 1},
+			{Type: "right", Color: "000000", Style: 1},
+		},
+	})
+	borderStyle, _ := f.NewStyle(&excelize.Style{
+		Border: []excelize.Border{
+			{Type: "left", Color: "000000", Style: 1},
+			{Type: "up", Color: "000000", Style: 1},
+			{Type: "down", Color: "000000", Style: 1},
+			{Type: "right", Color: "000000", Style: 1},
+		},
+	})
+
+	_ = f.SetRowStyle("Sheet1", 1, 220, borderStyle)
+	_ = f.SetColStyle("Sheet1", "A:N", borderStyle)
+	_ = f.SetCellStyle("Sheet1", "A6", "N7", titleStyle)
+
+	_ = f.SetCellStyle("Sheet1", fmt.Sprintf("A%v", i+10), fmt.Sprintf("N%v", i+10), totalBarStyle)
+
 	if err := f.SaveAs("TimeSheet.xlsx"); err != nil {
 		fmt.Println(err)
 	}
