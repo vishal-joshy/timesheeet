@@ -45,36 +45,30 @@ func writeTasks(username string, tasks []Task) {
 		return
 	}
 	f.SetCellValue("Sheet1", "A1", "CONSULTANT WEEKLY TIMESHEET")
+
+	err = f.MergeCell("Sheet1", "A1", "C1")
+	if err != nil {
+		panic(err)
+	}
+
 	f.SetCellValue("Sheet1", "A3", "Consultant Name")
+	err = f.MergeCell("Sheet1", "A3", "B3")
+	if err != nil {
+		panic(err)
+	}
 	f.SetCellValue("Sheet1", "C3", username)
 	f.SetCellValue("Sheet1", "A4", "Start Date")
 	f.SetCellValue("Sheet1", "C4", "End Date")
 	f.SetCellValue("Sheet1", "A5", tasks[0].date)
 	f.SetCellValue("Sheet1", "C5", tasks[len(tasks)-1].date)
 
-	f.SetCellValue("Sheet1", "B7", "Date")
-	f.SetCellValue("Sheet1", "C7", "Task")
-	f.SetCellValue("Sheet1", "D7", "Task Name")
-	f.SetCellValue("Sheet1", "E7", "Business Function")
-	f.SetCellValue("Sheet1", "F7", "Task Description")
-	f.SetCellValue("Sheet1", "G7", "Notes")
-	f.SetCellValue("Sheet1", "H7", "Hours")
-	f.SetCellValue("Sheet1", "I7", "Total Time")
-	f.SetCellValue("Sheet1", "J7", "Total Hours per day")
+	f.SetSheetRow("Sheet1", "B7", &[]interface{}{"Date", "Task", "Task Name", "Business Function", "Task Description", "Notes", "Hours", "Total Time", "Total Hours per Day"})
 
 	totalHours := 0
 	i := 0
 
 	for _, v := range tasks {
-		f.SetCellValue("Sheet1", fmt.Sprintf("B%v", i+8), v.date)
-		f.SetCellValue("Sheet1", fmt.Sprintf("C%v", i+8), i+1)
-		f.SetCellValue("Sheet1", fmt.Sprintf("D%v", i+8), v.task)
-		f.SetCellValue("Sheet1", fmt.Sprintf("E%v", i+8), v.businessFunc)
-		f.SetCellValue("Sheet1", fmt.Sprintf("F%v", i+8), v.taskDescription)
-		f.SetCellValue("Sheet1", fmt.Sprintf("G%v", i+8), "")
-		f.SetCellValue("Sheet1", fmt.Sprintf("H%v", i+8), v.hours)
-		f.SetCellValue("Sheet1", fmt.Sprintf("I%v", i+8), v.hours)
-		f.SetCellValue("Sheet1", fmt.Sprintf("J%v", i+8), v.hours)
+		f.SetSheetRow("Sheet1", fmt.Sprintf("B%v", i+8), &[]interface{}{v.date, i + 1, v.task, v.businessFunc, v.taskDescription, nil, v.hours, v.hours, v.hours})
 		i++
 		totalHours = totalHours + v.hours
 	}
