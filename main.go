@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/xuri/excelize/v2"
+	"gopkg.in/ini.v1"
 )
 
 type Task struct {
@@ -139,7 +140,16 @@ func getTaskList(td [][]string) []Task {
 }
 
 func main() {
-	username := "Vishal Joshy"
+	cfg, err := ini.Load("./config.ini")
+	if err != nil {
+		fmt.Println("Failed to read config")
+		os.Exit(1)
+	}
+	username := cfg.Section("").Key("name").String()
+	if username == "" {
+		fmt.Println("Err:Add username in config file")
+		os.Exit(1)
+	}
 	taskListData := ReadCSV()
 	taskList := getTaskList(taskListData)
 	fmt.Println(taskList)
